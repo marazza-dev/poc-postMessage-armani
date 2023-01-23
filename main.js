@@ -18,15 +18,22 @@
       log: false,
       heightCalculationMethod: 'bodyOffset',
       checkOrigin: false,
-      onInit: (iframe) => {
-        iframe.contentWindow.postMessage({
-          type: 'auth',
-          message: { name: 'Name', email: 'Email' },
-        }, "*")
-      }
+      // onInit: (iframe) => {
+      //   iframe.contentWindow.postMessage({
+      //     type: 'auth',
+      //     message: { name: 'Nome Cognome', email: 'email@email.it', country: 'IT' },
+      //   }, "*")
+      // }
     };
 
     iFrameResize(options, iframeElement);
   }
+
+  window.setTimeout(() => {
+    document.querySelector("iframe").contentWindow.postMessage({
+      type: "auth",
+      message: { name: "Nome Cognome", email: "email@email.it", country: "IT" },
+    }, "*")
+  }, 5000)
 
 })();

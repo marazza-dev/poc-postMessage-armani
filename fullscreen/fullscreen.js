@@ -54,7 +54,7 @@ import * as jose from '../node_modules/jose';
     'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
   );
   const alg = 'HS256';
-  const jwt = await new jose.SignJWT({ 'name': 'Nome Cognome', 'email': 'email@email.it' })
+  const jwt = await new jose.SignJWT({ 'name': 'Nome Cognome', 'email': 'email@email.it', 'country': 'IT' })
     .setProtectedHeader({ alg })
     .setIssuedAt()
     .setIssuer('urn:example:issuer')
@@ -97,7 +97,8 @@ import * as jose from '../node_modules/jose';
           type: 'auth',
           message: {
             name: payload.name,
-            email: payload.email
+            email: payload.email,
+            country: payload.country
           }
         }, "*");
       }
