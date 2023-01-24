@@ -1,8 +1,18 @@
-import * as jose from '../node_modules/jose';
+import { createJWT } from '../utils';
 
 (async function() {
   let iframes = [];
-  console.log('Initial iframes', iframes);
+
+  const authOptions = {
+    auth: {
+      name: 'Mario Rossi',
+      email: 'mario.rossi@email.it',
+      country: 'IT',
+    },
+    unauth: {
+      country: 'IT'
+    }
+  }
 
   const fullscreenBtn = document.querySelector("#fullscreen-btn");
 
@@ -49,28 +59,7 @@ import * as jose from '../node_modules/jose';
     document.querySelector(".iframe-close-icon").remove();
   };
 
-  // create JWT
-  const secret = new TextEncoder().encode(
-    'cc7e0d44fd473002f1c42167459001140ec6389b7353f8088f4d9a95f2f596f2',
-  );
-  const alg = 'HS256';
-  const jwt = await new jose.SignJWT({ 'name': 'Nome Cognome', 'email': 'email@email.it', 'country': 'IT' })
-    .setProtectedHeader({ alg })
-    .setIssuedAt()
-    .setIssuer('urn:example:issuer')
-    .setAudience('urn:example:audience')
-    .setExpirationTime('2h')
-    .setSubject('user:id:test')
-    .sign(secret)
-
-  console.log(jwt)
-
-  const { payload } = await jose.jwtVerify(jwt, secret, {
-    issuer: 'urn:example:issuer',
-    audience: 'urn:example:audience',
-  });
-
-  console.log('decoded jwt', { payload });
+  const jwt = await createJWT(authOptions.unauth);
 
   function initializeIFrame(iframeElement) {
     const options = {
@@ -82,24 +71,10 @@ import * as jose from '../node_modules/jose';
           console.warn('*** no iframe found?');
           return;
         };
-        // iframe-resizer sendMessage method
-        //
-        // iframes[0].iFrameResizer.sendMessage({
-        //   type: 'auth',
-        //   payload: {
-        //     'name': payload.name,
-        //     'email': payload.email
-        //   }
-        // }, '*')
-
         // browser native postMessage api
         iframe.contentWindow.postMessage({
           type: 'auth',
-          message: {
-            name: payload.name,
-            email: payload.email,
-            country: payload.country
-          }
+          message: jwt
         }, "*");
       }
     };

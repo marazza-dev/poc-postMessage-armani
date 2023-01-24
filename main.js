@@ -1,5 +1,16 @@
+import { createJWT } from "./utils";
 
 (async function() {
+  const authOptions = {
+    auth: {
+      name: 'Mario Rossi',
+      email: 'mario.rossi@email.it',
+      country: 'IT',
+    },
+    unauth: {
+      country: 'IT',
+    }
+  }
 
   addIFrame().then((iframe) => {
     initializeIFrame(iframe);
@@ -18,22 +29,25 @@
       log: false,
       heightCalculationMethod: 'bodyOffset',
       checkOrigin: false,
-      // onInit: (iframe) => {
-      //   iframe.contentWindow.postMessage({
-      //     type: 'auth',
-      //     message: { name: 'Nome Cognome', email: 'email@email.it', country: 'IT' },
-      //   }, "*")
-      // }
     };
 
     iFrameResize(options, iframeElement);
   }
 
-  window.setTimeout(() => {
-    document.querySelector("iframe").contentWindow.postMessage({
-      type: "auth",
-      message: { name: "Nome Cognome", email: "email@email.it", country: "IT" },
-    }, "*")
-  }, 5000)
+  
+  const jwt = await createJWT(authOptions.auth);
+
+  console.log(jwt)
+
+  window.addEventListener("message", (event) => {
+    // TODO -> abstract this handler into its own class
+    if (event.data?.type === "ready") {
+      console.log('*** PARENT - Received ready event');
+      event.source.postMessage({
+        type: 'auth',
+        message: jwt,
+      }, '*');
+    }
+  }, false);
 
 })();
