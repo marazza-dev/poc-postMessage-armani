@@ -42,7 +42,7 @@ iframe.contentWindow.postMessage(...);
 ### Message structure
 Once Tailoor is fully loaded, it will start listening for `message` events. Events that don't comply with the types and structures documented here will be ignored.
 
-***Tailoor is listening for:
+***Tailoor is listening for:***
 - `type: 'auth'`
 	Used to handle sharing user, language and country informations
 ```ts
@@ -76,7 +76,7 @@ interface JWTPayload {
 }
 ```
 ---
-***Parent is listening for:
+***Parent is listening for:***
 - `type: 'ready'`
 	This event is emitted once Tailoor is fully loaded and ready to handle message events.
 ```ts
