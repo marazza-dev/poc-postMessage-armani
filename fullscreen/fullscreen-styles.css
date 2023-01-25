@@ -62,3 +62,14 @@ iframe {
   text-align: center;
   vertical-align: middle;
 }
+
+.dialog {
+  position: absolute;
+  z-index: 9999;
+  top: calc(100vh - 500px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 150px;
+  padding: 1rem;
+}

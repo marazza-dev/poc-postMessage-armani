@@ -27,3 +27,13 @@ iframe {
   width: 1px;
   min-width: 100%;
 }
+
+.dialog {
+  position: absolute;
+  top: calc(100vh - 500px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 150px;
+  padding: 1rem;
+}

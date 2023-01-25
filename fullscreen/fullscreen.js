@@ -2,10 +2,18 @@ import { createJWT } from '../utils';
 
 (async function() {
   let iframes = [];
+  const dialog = document.querySelector('dialog');
+  const dialogButton = document.querySelector('#dialog-btn');
+  dialog.returnValue = 'unauth';
+
+  function openDialog() {
+    dialog.showModal();
+  }
 
   const authOptions = {
     auth: {
-      name: 'Mario Rossi',
+      name: 'Mario',
+      surname: 'Rossi',
       email: 'mario.rossi@email.it',
       country: 'IT',
     },
@@ -18,10 +26,9 @@ import { createJWT } from '../utils';
 
   fullscreenBtn.addEventListener("click", handleGoFullscreen);
 
-  function handleGoFullscreen() {
-    addIFrame().then((iframe) => {
-      initializeIFrame(iframe);
-    });
+  async function handleGoFullscreen() {
+    const iframe = await addIFrame();
+    initializeIFrame(iframe);
     addCloseIcon();
   };
 
@@ -47,6 +54,16 @@ import { createJWT } from '../utils';
     return iframe;
   };
 
+  function handleCloseDialogClick(e) {
+    dialog.returnValue = e.target.value;
+  }
+
+  function handleOnCloseDialog(iframe) {
+    if (dialog.returnValue === 'auth') {
+      createAndSendAuth(dialog.returnValue, iframe.contentWindow);
+    }
+  }
+
   function handleClickCloseIFrame() {
     if (!iframes.length) return;
     iframes[0].iFrameResizer.close();
@@ -59,27 +76,45 @@ import { createJWT } from '../utils';
     document.querySelector(".iframe-close-icon").remove();
   };
 
-  const jwt = await createJWT(authOptions.unauth);
+  async function createAndSendAuth(option, source) {
+    const jwt = await createJWT(authOptions[option]);
+    source.postMessage({
+      type: 'auth',
+      message: jwt,
+    }, '*');
+  }
 
   function initializeIFrame(iframeElement) {
     const options = {
       log: false,
       checkOrigin: false,
       onInit: (iframe) => {
-        console.log('*** on init ->', iframe);
         if (!iframes.length) {
           console.warn('*** no iframe found?');
           return;
         };
         // browser native postMessage api
-        iframe.contentWindow.postMessage({
-          type: 'auth',
-          message: jwt
-        }, "*");
+        createAndSendAuth(dialog.returnValue, iframe.contentWindow);
+
+        dialogButton.addEventListener('click', handleCloseDialogClick);
+        dialog.addEventListener('close', () => { handleOnCloseDialog(iframe) });
       }
     };
     iframes = iFrameResize(options, iframeElement);
+
   };
+
+
+
+  window.addEventListener('message', (event) => {
+    console.log('*** PARENT RECEIVED message -> ', event);
+    if (event.data?.type === "request-auth") {
+      console.log('*** PARENT RECEIVED request-auth message -> ', event);
+      if (dialog.returnValue === 'unauth') {
+        openDialog();
+      }
+    }
+  })
 
 })();
 
