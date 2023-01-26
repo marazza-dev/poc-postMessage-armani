@@ -78,7 +78,7 @@ interface JWTPayload {
 
 - `type: 'logout'`
  Used to logout user from Tailoor. It causes Tailoor to clear the user object state hold in memory 
-```js
+```ts
 interface Message {
   type: string
 }
