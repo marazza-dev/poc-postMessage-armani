@@ -21,7 +21,7 @@ import { createJWT } from "./utils";
       country: 'CH',
     },
     unauth: {
-      country: 'CH',
+      country: 'USA',
     }
   }
 
