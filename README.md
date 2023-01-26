@@ -44,7 +44,7 @@ Once Tailoor is fully loaded, it will start listening for `message` events. Even
 
 ***Tailoor is listening for:***
 - `type: 'auth'`
-	Used to handle sharing user, language and country informations
+	Used to send Tailoor the user informations.
 ```ts
 	interface Message {
 		type: string,
@@ -73,6 +73,14 @@ interface JWTPayload {
 ```ts
 interface JWTPayload {
 	country: string
+}
+```
+
+- `type: 'logout'`
+ Used to logout user from Tailoor. It causes Tailoor to clear the user object state hold in memory 
+```js
+interface Message {
+  type: string
 }
 ```
 ---
