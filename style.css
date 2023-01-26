@@ -10,13 +10,10 @@ body {
   position: relative;
 }
 
-header {
-  flex-direction: column;
-}
-
 .extra {
   display: flex;
-  justify-content: center;
+  flex-direction: row;
+  justify-content: space-evenly;
   align-items: center;
   text-align: center;
   height: 80px;

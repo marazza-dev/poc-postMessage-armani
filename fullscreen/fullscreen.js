@@ -5,6 +5,7 @@ import { createJWT } from '../utils';
   let iframes = [];
   const dialog = document.querySelector('dialog');
   const dialogButton = document.querySelector('#dialog-btn');
+  const logoutBtn = document.querySelector('#header-logout-btn');
   dialog.returnValue = 'unauth';
 
   function openDialog() {
@@ -115,6 +116,10 @@ import { createJWT } from '../utils';
         openDialog();
       }
     }
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    window.location.reload();
   })
 
 })();

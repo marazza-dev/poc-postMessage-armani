@@ -3,22 +3,15 @@ import { createJWT } from "./utils";
 (async function() {
   const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020";
   const dialog = document.querySelector('dialog');
-  dialog.returnValue = 'unauth';
+  const logoutBtn = document.querySelector('#header-logout-btn');
+  const loginBtn = document.querySelector('#header-login-btn');
   const dialogButton = document.querySelector('#dialog-btn');
+
+  dialog.returnValue = 'unauth';
 
   function openDialog() {
     dialog.showModal();
   }
-
-  dialogButton.addEventListener('click', (e) => {
-    dialog.returnValue = e.target.value;
-  })
-
-  dialog.addEventListener('close', () => {
-    if (dialog.returnValue === 'auth') {
-      createAndSendAuth(dialog.returnValue);
-    }
-  })
 
   const authOptions = {
     auth: {
@@ -80,5 +73,27 @@ import { createJWT } from "./utils";
       }
     }
   }, false);
+
+  dialogButton.addEventListener('click', (e) => {
+    dialog.returnValue = e.target.value;
+  });
+
+  dialog.addEventListener('close', () => {
+    if (dialog.returnValue === 'auth') {
+      createAndSendAuth(dialog.returnValue);
+    }
+  });
+
+  loginBtn.addEventListener('click', () => {
+    if (dialog.returnValue === 'unauth') {
+      openDialog();
+    }
+  });
+
+  logoutBtn.addEventListener('click', () => {
+    if (dialog.returnValue === 'unauth') return;
+    dialog.returnValue = 'unauth';
+    iframe.contentWindow.postMessage({ type: 'logout' }, '*');
+  })
 
 })();
