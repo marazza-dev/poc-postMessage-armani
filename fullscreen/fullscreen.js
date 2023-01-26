@@ -17,10 +17,10 @@ import { createJWT } from '../utils';
       name: 'Mario',
       surname: 'Rossi',
       email: 'mario.rossi@email.it',
-      country: 'IT',
+      country: 'CH',
     },
     unauth: {
-      country: 'IT'
+      country: 'CH'
     }
   }
 
