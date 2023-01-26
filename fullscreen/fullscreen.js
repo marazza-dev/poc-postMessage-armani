@@ -6,6 +6,9 @@ import { createJWT } from '../utils';
   const dialog = document.querySelector('dialog');
   const dialogButton = document.querySelector('#dialog-btn');
   const logoutBtn = document.querySelector('#header-logout-btn');
+
+  // Treat this as a authentication flag
+  // it can be eighter 'auth' | 'unauth'
   dialog.returnValue = 'unauth';
 
   function openDialog() {
@@ -119,6 +122,8 @@ import { createJWT } from '../utils';
   });
 
   logoutBtn.addEventListener('click', () => {
+    // Trigger page reload to initialize again dialog.returnValue to 'unauth'
+    // and to remove all listener started with the iframe mounting
     window.location.reload();
   })
 
