@@ -51,7 +51,7 @@ iframe {
   display: flex;
   justify-content: center;
   align-items: center;
-  top: 0;
+  top: 60px;
   right: 0;
   font-size: 2rem;
   cursor: pointer;
