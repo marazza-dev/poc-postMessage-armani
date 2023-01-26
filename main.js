@@ -1,6 +1,7 @@
 import { createJWT } from "./utils";
 
 (async function() {
+  const iframeSrc = "https://armani-shop-staging.tailoor.com";
   const dialog = document.querySelector('dialog');
   dialog.returnValue = 'unauth';
   const dialogButton = document.querySelector('#dialog-btn');
@@ -37,7 +38,7 @@ import { createJWT } from "./utils";
 
   async function addIFrame() {
     const iframe = document.createElement("iframe");
-    iframe.setAttribute("src", "https://armani-shop-localhost.tailoor.com:3020");
+    iframe.setAttribute("src", iframeSrc);
     iframe.setAttribute("frameborder", 0);
     document.querySelector("main").appendChild(iframe);
     return iframe;
