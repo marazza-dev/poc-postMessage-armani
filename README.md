@@ -66,7 +66,7 @@ interface JWTPayload {
 	name: string,
 	surname: string,
 	email: string,
-	country: string
+	country: string // ISO 3166-2 country code
 }
 ```
 - Anonymous user:
