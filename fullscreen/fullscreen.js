@@ -1,12 +1,15 @@
 import { createJWT } from '../utils';
 
 (async function() {
-  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020";
+  const iframeSrc = "https://armani-shop-staging.tailoor.com";
   let iframes = [];
   const dialog = document.querySelector('dialog');
   const dialogButton = document.querySelector('#dialog-btn');
-  const logoutBtn = document.querySelector('#header-logout-btn');
+
+  // Treat this as a authentication flag
+  // it can be eighter 'auth' | 'unauth'
   dialog.returnValue = 'unauth';
+  let isUserAuth = false;
 
   function openDialog() {
     dialog.showModal();
@@ -58,10 +61,12 @@ import { createJWT } from '../utils';
 
   function handleCloseDialogClick(e) {
     dialog.returnValue = e.target.value;
+    isUserAuth = true;
   }
 
   function handleOnCloseDialog(iframe) {
-    if (dialog.returnValue === 'auth') {
+    if (!iframe) return;
+    if (dialog.returnValue === 'auth' || isUserAuth) {
       createAndSendAuth(dialog.returnValue, iframe.contentWindow);
     }
   }
@@ -95,18 +100,19 @@ import { createJWT } from '../utils';
           console.warn('*** no iframe found?');
           return;
         };
+
         // browser native postMessage api
         createAndSendAuth(dialog.returnValue, iframe.contentWindow);
-
-        dialogButton.addEventListener('click', handleCloseDialogClick);
-        dialog.addEventListener('close', () => { handleOnCloseDialog(iframe) });
+      },
+      onClose: () => {
+        isUserAuth = false;
+        dialog.returnValue = 'unauth';
+        return true;
       }
     };
     iframes = iFrameResize(options, iframeElement);
 
   };
-
-
 
   window.addEventListener('message', (event) => {
     console.log('*** PARENT RECEIVED message -> ', event);
@@ -118,9 +124,8 @@ import { createJWT } from '../utils';
     }
   });
 
-  logoutBtn.addEventListener('click', () => {
-    window.location.reload();
-  })
+  dialogButton.addEventListener('click', handleCloseDialogClick);
+  dialog.addEventListener('close', () => { handleOnCloseDialog(iframes[0]) }, false);
 
 })();
 

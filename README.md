@@ -66,7 +66,7 @@ interface JWTPayload {
 	name: string,
 	surname: string,
 	email: string,
-	country: string
+	country: string // ISO 3166-2 country code
 }
 ```
 - Anonymous user:
@@ -78,7 +78,11 @@ interface JWTPayload {
 
 - `type: 'logout'`
  Used to logout user from Tailoor. It causes Tailoor to clear the user object state hold in memory 
+<<<<<<< HEAD
 ```js
+=======
+```ts
+>>>>>>> main
 interface Message {
   type: string
 }
