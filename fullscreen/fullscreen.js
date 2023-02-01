@@ -97,14 +97,11 @@ import { createJWT } from '../utils';
     const options = {
       log: false,
       checkOrigin: false,
-      onInit: (iframe) => {
+      onInit: () => {
         if (!iframes.length) {
           console.warn('*** no iframe found?');
           return;
         };
-
-        // browser native postMessage api
-        createAndSendAuth(dialog.returnValue, iframe.contentWindow);
       },
       onClose: () => {
         isUserAuth = false;
@@ -123,6 +120,11 @@ import { createJWT } from '../utils';
       if (dialog.returnValue === 'unauth') {
         openDialog();
       }
+    }
+    if (event.data?.type === "ready") {
+      // send auth message to Tailoor
+      console.log('~~~ ready event fired');
+      createAndSendAuth(isUserAuth ? 'auth' : 'unauth', iframes[0].contentWindow);
     }
   });
 
