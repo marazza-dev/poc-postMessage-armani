@@ -27,6 +27,20 @@ const options = {
 
 iFrameResize(options, iframeElement);
 ```
+### Setting the language
+For both the above solutions, the parent page has 2 options when it comes to setting the language inside of Tailoor.
+1. Set the iframe `src` attribute to a localized home page:
+  ```js
+  // for english
+  iframe.setAttribute('src', 'https://production-endpoint.tailoor.com/en');
+
+  // for italian
+  iframe.setAttribute('src', 'https://production-endpoint.tailoor.com/it');
+  ```
+2. Set the iframe `src` attribute to our custom middlaware page (`/embed`) and pass a language property inside the JWT payload. See [below](#message-structure) for more details on how to pass the language property via JWT.
+  ```js
+  iframe.setAttribute('src', 'https://production-endpoint.tailoor.com/embed')  
+  ```
 
 ## postMessage comunication strategy
 Browser native `postMessage` API will be used as a comunication layer between the parent page (YNAP) and the iframed page (Tailoor).
@@ -66,15 +80,19 @@ interface JWTPayload {
 	name: string,
 	surname: string,
 	email: string,
-	country: string // ISO 3166-2 country code
+	country: string, // ISO 3166-2 country code
+  language?: string // ISO 639-1 language code
 }
 ```
 - Anonymous user:
 ```ts
 interface JWTPayload {
-	country: string
+	country: string, // ISO 3166-2 country code
+  language?: string // ISO 639-1 language code
 }
 ```
+> Note that the `language` property is optional, and only needed if the iframe src is pointing to the middleware page `/embed`.
+> If you choose to use the localized path as iframe src (`/en`, `/it`, etc...), you should not pass the language inside the JWT payload.
 
 - `type: 'logout'`
  Used to logout user from Tailoor. It causes Tailoor to clear the user object state hold in memory 
