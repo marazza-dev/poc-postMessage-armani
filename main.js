@@ -1,7 +1,7 @@
 import { createJWT } from "./utils";
 
 (async function() {
-  const iframeSrc = "https://armani-shop-staging.tailoor.com/embed";
+  const iframeSrc = "https://armani-shop-staging.tailoor.com/embed/appointment";
   const dialog = document.querySelector('dialog');
   const logoutBtn = document.querySelector('#header-logout-btn');
   const loginBtn = document.querySelector('#header-login-btn');
@@ -18,11 +18,11 @@ import { createJWT } from "./utils";
       name: 'Mario',
       surname: 'Rossi',
       email: 'mario.rossi@email.it',
-      country: 'CH',
+      country: 'it',
       language: 'it'
     },
     unauth: {
-      country: 'CH',
+      country: 'it',
       language: 'it'
     }
   }
