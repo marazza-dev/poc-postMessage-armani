@@ -1,7 +1,8 @@
 import { createJWT } from '../utils';
 
 (async function() {
-  const iframeSrc = "https://armani-shop-staging.tailoor.com/embed/appointment";
+  // const iframeSrc = "https://armani-shop-staging.tailoor.com/embed/appointment";
+  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/embed/appointment";
   let iframes = [];
   const dialog = document.querySelector('dialog');
   const dialogButton = document.querySelector('#dialog-btn');
