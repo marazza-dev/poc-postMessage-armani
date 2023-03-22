@@ -1,7 +1,7 @@
 import { createJWT } from "./utils";
 
 (async function() {
-  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/embed/appointment";
+  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/it/personalizza/jacket-dw-formal";
   const dialog = document.querySelector('dialog');
   const logoutBtn = document.querySelector('#header-logout-btn');
   const loginBtn = document.querySelector('#header-login-btn');
@@ -27,9 +27,12 @@ import { createJWT } from "./utils";
     }
   }
 
-  addIFrame().then((iframe) => {
-    initializeIFrame(iframe);
-  });
+  // addIFrame().then((iframe) => {
+  //   initializeIFrame(iframe);
+  // });
+
+  const iframe = await addIFrame();
+  initializeIFrame(iframe)
 
   async function addIFrame() {
     const iframe = document.createElement("iframe");
@@ -50,7 +53,7 @@ import { createJWT } from "./utils";
   }
 
 
-  const iframe = document.querySelector('iframe');
+  // const iframe = document.querySelector('iframe');
   async function createAndSendAuth(option, source = iframe.contentWindow) {
     const jwt = await createJWT(authOptions[option]);
     source.postMessage({

@@ -1,7 +1,8 @@
 import { createJWT } from '../utils';
 
 (async function() {
-  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/embed/appointment";
+  // const iframeSrc = "https://armani-shop-staging.tailoor.com/embed";
+  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/embed/customize/jacket-dw-formal";
   let iframes = [];
   const dialog = document.querySelector('dialog');
   const dialogButton = document.querySelector('#dialog-btn');
@@ -29,13 +30,16 @@ import { createJWT } from '../utils';
     }
   }
 
+  const iframe = await addIFrame();
+  initializeIFrame(iframe);
+
   const fullscreenBtn = document.querySelector("#fullscreen-btn");
 
   fullscreenBtn.addEventListener("click", handleGoFullscreen);
 
   async function handleGoFullscreen() {
-    const iframe = await addIFrame();
-    initializeIFrame(iframe);
+    document.querySelector('.iframe-container').classList.remove('hidden');
+    document.querySelector('.iframe-container').classList.add('visible');
     addCloseIcon();
   };
 
@@ -56,8 +60,7 @@ import { createJWT } from '../utils';
     const iframe = document.createElement("iframe");
     iframe.setAttribute("src", iframeSrc);
     iframe.setAttribute("frameborder", 0);
-    iframe.classList.add("iframe-active");
-    document.querySelector("main").appendChild(iframe);
+    document.querySelector(".iframe-container").appendChild(iframe);
     return iframe;
   };
 
@@ -75,13 +78,17 @@ import { createJWT } from '../utils';
 
   function handleClickCloseIFrame() {
     if (!iframes.length) return;
-    iframes[0].iFrameResizer.close();
+    // iframes[0].iFrameResizer.close();
+    document.querySelector('.iframe-container').classList.remove('visible');
+    document.querySelector('.iframe-container').classList.add('hidden');
     document.querySelector(".iframe-close-icon").remove();
   };
 
   function handleKeydownCloseIFrame(event) {
     if (!iframes.length || event.keyCode !== 27) return;
-    iframes[0].iFrameResizer.close();
+    // iframes[0].iFrameResizer.close();
+    document.querySelector('.iframe-container').classList.remove('visible');
+    document.querySelector('.iframe-container').classList.add('hidden');
     document.querySelector(".iframe-close-icon").remove();
   };
 
@@ -96,7 +103,8 @@ import { createJWT } from '../utils';
   function initializeIFrame(iframeElement) {
     const options = {
       log: false,
-      checkOrigin: false,
+      checkOrigin: ['https://localhost:5173', 'https://armani-shop-localhost.tailoor.com:3020'],
+      // checkOrigin: false,
       onInit: () => {
         if (!iframes.length) {
           console.warn('*** no iframe found?');
