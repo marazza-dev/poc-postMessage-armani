@@ -1,7 +1,7 @@
 import { createJWT } from "./utils";
 
 (async function() {
-  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/it/personalizza/jacket-dw-formal";
+  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/embed";
   const dialog = document.querySelector('dialog');
   const logoutBtn = document.querySelector('#header-logout-btn');
   const loginBtn = document.querySelector('#header-login-btn');

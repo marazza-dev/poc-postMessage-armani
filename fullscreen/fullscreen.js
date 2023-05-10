@@ -1,8 +1,9 @@
 import { createJWT } from '../utils';
 
 (async function() {
-  // const iframeSrc = "https://armani-shop-staging.tailoor.com/embed";
-  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/embed/customize/jacket-dw-formal";
+  // const iframeSrc = "https://armani-shop-staging.tailoor.com/embed/appointment";
+  // const iframeSrc = "https://armani-shop.tailoor.com/embed"
+  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/embed/appointment";
   let iframes = [];
   const dialog = document.querySelector('dialog');
   const dialogButton = document.querySelector('#dialog-btn');
@@ -103,7 +104,12 @@ import { createJWT } from '../utils';
   function initializeIFrame(iframeElement) {
     const options = {
       log: false,
-      checkOrigin: ['https://localhost:5173', 'https://armani-shop-localhost.tailoor.com:3020'],
+      checkOrigin: [
+        'https://localhost:5173',
+        'https://armani-shop-localhost.tailoor.com:3020',
+        'https://armani-shop-staging.tailoor.com',
+        'https://armani-shop.tailoor.com',
+      ],
       // checkOrigin: false,
       onInit: () => {
         if (!iframes.length) {
