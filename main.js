@@ -1,13 +1,16 @@
 import { createJWT } from "./utils";
 
-(async function() {
-  const iframeSrc = "https://armani-shop-localhost.tailoor.com:3020/embed";
-  const dialog = document.querySelector('dialog');
-  const logoutBtn = document.querySelector('#header-logout-btn');
-  const loginBtn = document.querySelector('#header-login-btn');
-  const dialogButton = document.querySelector('#dialog-btn');
+(async function () {
+  const iframeSrc =
+    "https://armani-shop-localhost.tailoor.com:3020/embed/appointment";
+  // const iframeSrc =
+  //   "https://armani-shop-localhost.tailoor.com:3020/embed/total-look/GAMTMADV03";
+  const dialog = document.querySelector("dialog");
+  const logoutBtn = document.querySelector("#header-logout-btn");
+  const loginBtn = document.querySelector("#header-login-btn");
+  const dialogButton = document.querySelector("#dialog-btn");
 
-  dialog.returnValue = 'unauth';
+  dialog.returnValue = "unauth";
 
   function openDialog() {
     dialog.showModal();
@@ -15,24 +18,24 @@ import { createJWT } from "./utils";
 
   const authOptions = {
     auth: {
-      name: 'Mario',
-      surname: 'Rossi',
-      email: 'mario.rossi@email.it',
-      country: 'it',
-      language: 'it',
+      name: "Mario",
+      surname: "Rossi",
+      email: "mario.rossi@email.it",
+      country: "it",
+      language: "it",
     },
     unauth: {
-      country: 'it',
-      language: 'it',
-    }
-  }
+      country: "it",
+      language: "it",
+    },
+  };
 
   // addIFrame().then((iframe) => {
   //   initializeIFrame(iframe);
   // });
 
   const iframe = await addIFrame();
-  initializeIFrame(iframe)
+  initializeIFrame(iframe);
 
   async function addIFrame() {
     const iframe = document.createElement("iframe");
@@ -40,65 +43,70 @@ import { createJWT } from "./utils";
     iframe.setAttribute("frameborder", 0);
     document.querySelector("main").appendChild(iframe);
     return iframe;
-  };
+  }
 
   function initializeIFrame(iframeElement) {
     const options = {
       log: false,
-      heightCalculationMethod: 'bodyOffset',
+      heightCalculationMethod: "bodyOffset",
       checkOrigin: false,
     };
 
     iFrameResize(options, iframeElement);
   }
 
-
   // const iframe = document.querySelector('iframe');
   async function createAndSendAuth(option, source = iframe.contentWindow) {
     const jwt = await createJWT(authOptions[option]);
-    source.postMessage({
-      type: 'auth',
-      message: jwt,
-    }, '*');
+    source.postMessage(
+      {
+        type: "auth",
+        message: jwt,
+      },
+      "*"
+    );
   }
 
-  window.addEventListener("message", (event) => {
-    // console.log('*** PARENT RECEIVED message -> ', event);
-    // TODO -> abstract this handler into its own class
-    if (event.data?.type === "ready") {
-      console.log('*** PARENT - Received ready event');
-      createAndSendAuth(dialog.returnValue, event.source);
-      return
-    }
-
-    if (event.data?.type === "request-auth") {
-      console.log('*** PARENT RECEIVED request-auth message -> ', event);
-      if (dialog.returnValue === 'unauth') {
-        openDialog();
+  window.addEventListener(
+    "message",
+    (event) => {
+      // console.log('*** PARENT RECEIVED message -> ', event);
+      // TODO -> abstract this handler into its own class
+      if (event.data?.type === "ready") {
+        console.log("*** PARENT - Received ready event");
+        createAndSendAuth(dialog.returnValue, event.source);
+        return;
       }
-    }
-  }, false);
 
-  dialogButton.addEventListener('click', (e) => {
+      if (event.data?.type === "request-auth") {
+        console.log("*** PARENT RECEIVED request-auth message -> ", event);
+        if (dialog.returnValue === "unauth") {
+          openDialog();
+        }
+      }
+    },
+    false
+  );
+
+  dialogButton.addEventListener("click", (e) => {
     dialog.returnValue = e.target.value;
   });
 
-  dialog.addEventListener('close', () => {
-    if (dialog.returnValue === 'auth') {
+  dialog.addEventListener("close", () => {
+    if (dialog.returnValue === "auth") {
       createAndSendAuth(dialog.returnValue);
     }
   });
 
-  loginBtn.addEventListener('click', () => {
-    if (dialog.returnValue === 'unauth') {
+  loginBtn.addEventListener("click", () => {
+    if (dialog.returnValue === "unauth") {
       openDialog();
     }
   });
 
-  logoutBtn.addEventListener('click', () => {
-    if (dialog.returnValue === 'unauth') return;
-    dialog.returnValue = 'unauth';
-    iframe.contentWindow.postMessage({ type: 'logout' }, '*');
-  })
-
+  logoutBtn.addEventListener("click", () => {
+    if (dialog.returnValue === "unauth") return;
+    dialog.returnValue = "unauth";
+    iframe.contentWindow.postMessage({ type: "logout" }, "*");
+  });
 })();
